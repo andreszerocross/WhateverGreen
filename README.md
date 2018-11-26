@@ -21,7 +21,7 @@ WhateverGreen
 - Fixes an issue in AppleGraphicsDevicePolicy.kext so that we could use a MacPro6,1 board-id/model combination,  without the usual hang with a black screen. [Patching AppleGraphicsDevicePolicy.kext](https://pikeralpha.wordpress.com/2015/11/23/patching-applegraphicsdevicepolicy-kext)
 - Modifies macOS to recognize NVIDIA's web drivers as platform binaries. This resolves the issue with transparent windows without content, which appear for applications that use Metal and have Library Validation enabled. Common affected applications are iBooks and Little Snitch Network Monitor, though this patch is universal and fixes them all. [NVWebDriverLibValFix](https://github.com/mologie/NVWebDriverLibValFix)
 - Injects IOVARendererID into GPU properties (required for Shiki-based solution for non-freezing Intel and/or any discrete GPU)
-- Allows to use ports HDMI, DP, Digital DVI with audio (Injects @0connector-type - @5connector-type properties into GPU)
+- For Intel HD digital audio HDMI, DP, Digital DVI (Patches connector-type DP -> HDMI)
 - Fixes NVIDIA GPU interface stuttering on 10.13 (official and web drivers)
 
 #### Documentation
@@ -31,15 +31,15 @@ Read [FAQs](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/) an
 - `-wegdbg` to enable debug printing (available in DEBUG binaries).
 - `-wegoff` to disable WhateverGreen.
 - `-wegbeta` to enable WhateverGreen on unsupported os versions (10.13 and below are enabled by default).
-- `-wegnoegpu` to disable external GPU (or add `disable-external-gpu` property to IGPU)
+- `-wegnoegpu` to disable external GPU (or add `disable-external-gpu` property to IGPU).
 - `-radvesa` to disable ATI/AMD video acceleration completely.
 - `-igfxvesa` to boot Intel graphics without hardware acceleration (VESA mode).
 - `-rad24` to enforce 24-bit display mode.
 - `-raddvi` to enable DVI transmitter correction (required for 290X, 370, etc.).
 - `radpg=15` to disable several power-gating modes (see FAQ, required for Cape Verde GPUs).
-- `agdpmod=cfgmap` enforcing `none` into ConfigMap dictionary for system board-id
-- `agdpmod=vit9696` disables check for board-id , enabled by default
+- `agdpmod=vit9696` disables check for `board-id` (or add `agdpmod` property to external GPU).
 - `agdpmod=pikera` replaces `board-id` with `board-ix`
+- `agdpmod=ignore` disables AGDP patches (`vit9696,pikera` value is implicit default for external GPUs)
 - `ngfxgl=1` boot argument (and `disable-metal` property) to disable Metal support on NVIDIA
 - `ngfxcompat=1` boot argument (and `force-compat` property) to ignore compatibility check in NVDAStartupWeb
 - `ngfxsubmit=0` boot argument to disable interface stuttering fix on 10.13
